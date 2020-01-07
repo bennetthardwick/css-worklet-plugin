@@ -16,7 +16,7 @@
 
 import { foo } from './dep';
 
-console.log('hello from worker');
+console.log('hello from worker 1');
 
 addEventListener('message', ({ data }) => {
   console.log('worker got message', data);

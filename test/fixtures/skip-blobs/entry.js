@@ -14,8 +14,4 @@
  * the License.
  */
 
-const worker = new Worker(new Blob(['onmessage=()=>{postMessage("right back at ya")}']));
-worker.onmessage = ({ data }) => {
-  console.log('page got data: ', data);
-};
-worker.postMessage('hello');
+CSS.paintWorklet(new Blob(['']));

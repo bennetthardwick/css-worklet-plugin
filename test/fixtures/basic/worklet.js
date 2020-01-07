@@ -14,13 +14,4 @@
  * the License.
  */
 
-import { foo } from './dep';
-
-console.log('hello from worker');
-
-addEventListener('message', ({ data }) => {
-  console.log('worker got message', data);
-  if (data === 'hello') {
-    postMessage(foo);
-  }
-});
+console.log('hello from worklet');

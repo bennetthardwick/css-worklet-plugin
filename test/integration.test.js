@@ -14,7 +14,7 @@
  * the License.
  */
 
-import WorkerPlugin from '../src';
+import CSSWorkletPlugin from '../src';
 import path from 'path';
 import { createStaticServer } from './_server';
 import { runWebpack } from './_util';
@@ -23,18 +23,18 @@ import { evaluatePage } from './_page';
 jest.setTimeout(30000);
 
 describe('Integration', () => {
-  test('The resulting Worker is instantiated correctly', async () => {
+  test('The resulting Worklet is instantiated correctly', async () => {
     const fixture = 'basic';
 
     await runWebpack(fixture, {
-      plugins: [new WorkerPlugin()]
+      plugins: [new CSSWorkletPlugin()]
     });
 
     const server = await createStaticServer(path.resolve(__dirname, 'fixtures', fixture));
 
-    const consoleText = await evaluatePage(server.url, /page got data/g);
+    const consoleText = await evaluatePage(server.url, /hello from worklet/g);
 
-    expect(consoleText).toMatch(/page got data/g);
+    expect(consoleText).toMatch(/hello from worklet/g);
 
     await server.stop();
   });
