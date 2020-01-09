@@ -20,7 +20,7 @@ import CSS_WORKLET_PLUGIN_SYMBOL from './symbol';
 
 const NAME = 'CssWorkletPlugin';
 const JS_TYPES = ['auto', 'esm', 'dynamic'];
-const WORKLET_TYPES = ['paintWorklet', 'animationWorklet'];
+const WORKLET_TYPES = ['paintWorklet', 'animationWorklet', 'layoutWorklet'];
 const workerLoader = path.resolve(__dirname, 'loader.js');
 
 const handleWorklet = (parser, workletId) => expr => {
