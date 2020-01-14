@@ -14,5 +14,6 @@
  * the License.
  */
 
-const CSS_WORKLET_PLUGIN_SYMBOL = Symbol('CSS_WORKLET_PLUGIN_SYMBOL');
-export default CSS_WORKLET_PLUGIN_SYMBOL;
+const key = 'WEBPACK_CSS_WORKLET_PLUGIN';
+Symbol.for(key);
+export default key;

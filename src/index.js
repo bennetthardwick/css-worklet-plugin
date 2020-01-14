@@ -16,12 +16,14 @@
 
 import path from 'path';
 import ParserHelpers from 'webpack/lib/ParserHelpers';
-import CSS_WORKLET_PLUGIN_SYMBOL from './symbol';
+import CSS_WORKLET_PLUGIN_SYMBOL_KEY from './symbol';
 
 const NAME = 'CssWorkletPlugin';
 const JS_TYPES = ['auto', 'esm', 'dynamic'];
 const WORKLET_TYPES = ['paintWorklet', 'animationWorklet', 'layoutWorklet'];
 const workerLoader = path.resolve(__dirname, 'loader.js');
+
+const CSS_WORKLET_PLUGIN_SYMBOL = Symbol.for(CSS_WORKLET_PLUGIN_SYMBOL_KEY);
 
 const handleWorklet = (parser, workletId) => expr => {
   if (expr.callee.property.name !== 'addModule') return false;

@@ -18,18 +18,20 @@ import loaderUtils from 'loader-utils';
 import SingleEntryPlugin from 'webpack/lib/SingleEntryPlugin';
 import WebWorkerTemplatePlugin from 'webpack/lib/webworker/WebWorkerTemplatePlugin';
 import FetchCompileWasmTemplatePlugin from 'webpack/lib/web/FetchCompileWasmTemplatePlugin';
-import WORKER_PLUGIN_SYMBOL from './symbol';
+import CSS_WORKLET_PLUGIN_SYMBOL_KEY from './symbol';
 
+const CSS_WORKLET_PLUGIN_SYMBOL = Symbol.for(CSS_WORKLET_PLUGIN_SYMBOL_KEY);
 const NAME = 'CssWorkletPluginLoader';
 let hasWarned = false;
 
 export function pitch (request) {
   this.cacheable(false);
   const cb = this.async();
+  debugger;
 
   const compilerOptions = this._compiler.options || {};
 
-  const pluginOptions = compilerOptions.plugins.find(p => p[WORKER_PLUGIN_SYMBOL]).options;
+  const pluginOptions = compilerOptions.plugins.find(p => p[CSS_WORKLET_PLUGIN_SYMBOL]).options;
 
   if (pluginOptions.globalObject == null && !hasWarned && compilerOptions.output && compilerOptions.output.globalObject === 'window') {
     hasWarned = true;

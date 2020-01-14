@@ -22,7 +22,7 @@ import { evaluatePage } from './_page';
 
 jest.setTimeout(30000);
 
-describe('Integration', () => {
+xdescribe('Integration', () => {
   test('The resulting Worklet is instantiated correctly', async () => {
     const fixture = 'basic';
 
