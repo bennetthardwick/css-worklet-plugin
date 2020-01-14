@@ -10,7 +10,7 @@
     "dev": "jest --verbose --watchAll",
     "test-dev": "npm run build && node --inspect-brk node_modules/.bin/jest --runInBand",
     "test": "npm run build && jest",
-    "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
+    "release": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "eslintConfig": {
     "extends": "eslint-config-standard",
