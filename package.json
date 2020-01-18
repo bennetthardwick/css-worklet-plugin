@@ -1,12 +1,11 @@
 {
   "name": "css-worklet-plugin",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Webpack plugin to bundle CSS Worklet automagically.",
   "main": "src/index.js",
   "repository": "earnubs/css-worklet-plugin",
   "scripts": {
     "build": "microbundle --inline none --format cjs --no-compress src/*.js",
-    "prepack": "npm run build",
     "dev": "jest --verbose --watchAll",
     "test-dev": "npm run build && node --inspect-brk node_modules/.bin/jest --runInBand",
     "test": "npm run build && jest",
