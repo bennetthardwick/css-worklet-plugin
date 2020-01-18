@@ -16,4 +16,4 @@
 
 const key = 'WEBPACK_CSS_WORKLET_PLUGIN';
 Symbol.for(key);
-export default key;
+module.exports = key;

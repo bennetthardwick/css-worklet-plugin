@@ -14,9 +14,9 @@
  * the License.
  */
 
-import path from 'path';
-import ParserHelpers from 'webpack/lib/ParserHelpers';
-import CSS_WORKLET_PLUGIN_SYMBOL_KEY from './symbol';
+const path = require('path');
+const ParserHelpers = require('webpack/lib/ParserHelpers');
+const CSS_WORKLET_PLUGIN_SYMBOL_KEY = require('./symbol');
 
 const NAME = 'CssWorkletPlugin';
 const JS_TYPES = ['auto', 'esm', 'dynamic'];
@@ -44,7 +44,7 @@ const handleWorklet = (parser, workletId) => expr => {
   return ParserHelpers.addParsedVariableToModule(parser, id, req);
 };
 
-export default class CssWorkletPlugin {
+class CssWorkletPlugin {
   constructor (options) {
     this.options = options || {};
     this[CSS_WORKLET_PLUGIN_SYMBOL] = true;
@@ -63,3 +63,5 @@ export default class CssWorkletPlugin {
     });
   }
 }
+
+module.exports = CssWorkletPlugin;

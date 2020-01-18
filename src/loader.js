@@ -14,20 +14,19 @@
  * the License.
  */
 
-import loaderUtils from 'loader-utils';
-import SingleEntryPlugin from 'webpack/lib/SingleEntryPlugin';
-import WebWorkerTemplatePlugin from 'webpack/lib/webworker/WebWorkerTemplatePlugin';
-import FetchCompileWasmTemplatePlugin from 'webpack/lib/web/FetchCompileWasmTemplatePlugin';
-import CSS_WORKLET_PLUGIN_SYMBOL_KEY from './symbol';
+const loaderUtils = require('loader-utils');
+const SingleEntryPlugin = require('webpack/lib/SingleEntryPlugin');
+const WebWorkerTemplatePlugin = require('webpack/lib/webworker/WebWorkerTemplatePlugin');
+const FetchCompileWasmTemplatePlugin = require('webpack/lib/web/FetchCompileWasmTemplatePlugin');
+const CSS_WORKLET_PLUGIN_SYMBOL_KEY = require('./symbol');
 
 const CSS_WORKLET_PLUGIN_SYMBOL = Symbol.for(CSS_WORKLET_PLUGIN_SYMBOL_KEY);
 const NAME = 'CssWorkletPluginLoader';
 let hasWarned = false;
 
-export function pitch (request) {
+function pitch (request) {
   this.cacheable(false);
   const cb = this.async();
-  debugger;
 
   const compilerOptions = this._compiler.options || {};
 
@@ -84,4 +83,4 @@ export function pitch (request) {
   });
 };
 
-export default { pitch };
+module.exports = pitch;

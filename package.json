@@ -80,11 +80,11 @@
     "microbundle": "^0.8.2",
     "puppeteer": "^1.11.0",
     "serve-handler": "^5.0.7",
-    "terser-webpack-plugin": "^1.1.0"
+    "terser-webpack-plugin": "^1.1.0",
+    "webpack": "^4.41.5"
   },
   "dependencies": {
-    "loader-utils": "^1.1.0",
-    "webpack": "^4.41.5"
+    "loader-utils": "^1.2.3"
   },
   "peerDependencies": {
     "webpack": ">= 4"
