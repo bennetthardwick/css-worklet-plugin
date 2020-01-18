@@ -1,6 +1,6 @@
 {
   "name": "css-worklet-plugin",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Webpack plugin to bundle CSS Worklet automagically.",
   "main": "dist/css-worklet-plugin.js",
   "repository": "earnubs/css-worklet-plugin",
