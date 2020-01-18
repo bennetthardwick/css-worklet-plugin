@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-const key = 'WEBPACK_CSS_WORKLET_PLUGIN';
-Symbol.for(key);
+var key = 'WEBPACK_CSS_WORKLET_PLUGIN';
 module.exports = key;
+//# sourceMappingURL=symbol.js.map

@@ -1,8 +1,8 @@
 {
   "name": "css-worklet-plugin",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Webpack plugin to bundle CSS Worklet automagically.",
-  "main": "dist/css-worklet-plugin.js",
+  "main": "src/index.js",
   "repository": "earnubs/css-worklet-plugin",
   "scripts": {
     "build": "microbundle --inline none --format cjs --no-compress src/*.js",
@@ -10,7 +10,7 @@
     "dev": "jest --verbose --watchAll",
     "test-dev": "npm run build && node --inspect-brk node_modules/.bin/jest --runInBand",
     "test": "npm run build && jest",
-    "release": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
+    "release": "npm run build && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "eslintConfig": {
     "extends": "eslint-config-standard",

@@ -13,74 +13,77 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+var loaderUtils = require('loader-utils');
 
-const loaderUtils = require('loader-utils');
-const SingleEntryPlugin = require('webpack/lib/SingleEntryPlugin');
-const WebWorkerTemplatePlugin = require('webpack/lib/webworker/WebWorkerTemplatePlugin');
-const FetchCompileWasmTemplatePlugin = require('webpack/lib/web/FetchCompileWasmTemplatePlugin');
-const CSS_WORKLET_PLUGIN_SYMBOL_KEY = require('./symbol');
+var SingleEntryPlugin = require('webpack/lib/SingleEntryPlugin');
 
-const CSS_WORKLET_PLUGIN_SYMBOL = Symbol.for(CSS_WORKLET_PLUGIN_SYMBOL_KEY);
-const NAME = 'CssWorkletPluginLoader';
-let hasWarned = false;
+var WebWorkerTemplatePlugin = require('webpack/lib/webworker/WebWorkerTemplatePlugin');
 
-function pitch (request) {
+var FetchCompileWasmTemplatePlugin = require('webpack/lib/web/FetchCompileWasmTemplatePlugin');
+
+var CSS_WORKLET_PLUGIN_SYMBOL_KEY = require('./symbol');
+
+var CSS_WORKLET_PLUGIN_SYMBOL = Symbol.for(CSS_WORKLET_PLUGIN_SYMBOL_KEY);
+var NAME = 'CssWorkletPluginLoader';
+var hasWarned = false;
+
+function pitch(request) {
   this.cacheable(false);
-  const cb = this.async();
-
-  const compilerOptions = this._compiler.options || {};
-
-  const pluginOptions = compilerOptions.plugins.find(p => p[CSS_WORKLET_PLUGIN_SYMBOL]).options;
+  var cb = this.async();
+  var compilerOptions = this._compiler.options || {};
+  var pluginOptions = compilerOptions.plugins.find(function (p) { return p[CSS_WORKLET_PLUGIN_SYMBOL]; }).options;
 
   if (pluginOptions.globalObject == null && !hasWarned && compilerOptions.output && compilerOptions.output.globalObject === 'window') {
     hasWarned = true;
     console.warn('Warning (css-worklet-plugin): output.globalObject is set to "window". It must be set to "self" to support HMR in Worklets.');
   }
 
-  const options = loaderUtils.getOptions(this) || {};
-  const chunkFilename = compilerOptions.output.chunkFilename.replace(/\.([a-z]+)$/i, '.worklet.$1');
-  const workletOptions = {
+  var options = loaderUtils.getOptions(this) || {};
+  var chunkFilename = compilerOptions.output.chunkFilename.replace(/\.([a-z]+)$/i, '.worklet.$1');
+  var workletOptions = {
     filename: chunkFilename.replace(/\[(?:chunkhash|contenthash)(:\d+(?::\d+)?)?\]/g, '[hash$1]'),
-    chunkFilename,
+    chunkFilename: chunkFilename,
     globalObject: pluginOptions.globalObject || 'self'
   };
-
-  const plugins = (pluginOptions.plugins || []).map(plugin => {
+  var plugins = (pluginOptions.plugins || []).map(function (plugin) {
     if (typeof plugin !== 'string') {
       return plugin;
     }
-    const found = compilerOptions.plugins.find(p => p.constructor.name === plugin);
+
+    var found = compilerOptions.plugins.find(function (p) { return p.constructor.name === plugin; });
+
     if (!found) {
-      console.warn(`Warning (css-worklet-plugin): Plugin "${plugin}" is not found.`);
+      console.warn(("Warning (css-worklet-plugin): Plugin \"" + plugin + "\" is not found."));
     }
+
     return found;
   });
 
-  const workletCompiler = this._compilation.createChildCompiler(NAME, workletOptions, plugins);
-  workletCompiler.context = this._compiler.context;
-  (new WebWorkerTemplatePlugin(workletOptions)).apply(workletCompiler);
-  (new FetchCompileWasmTemplatePlugin({
-    mangleImports: compilerOptions.optimization.mangleWasmImports
-  })).apply(workletCompiler);
-  (new SingleEntryPlugin(this.context, request, options.name)).apply(workletCompiler);
+  var workletCompiler = this._compilation.createChildCompiler(NAME, workletOptions, plugins);
 
-  const subCache = `subcache ${__dirname} ${request}`;
-  workletCompiler.hooks.compilation.tap(NAME, compilation => {
+  workletCompiler.context = this._compiler.context;
+  new WebWorkerTemplatePlugin(workletOptions).apply(workletCompiler);
+  new FetchCompileWasmTemplatePlugin({
+    mangleImports: compilerOptions.optimization.mangleWasmImports
+  }).apply(workletCompiler);
+  new SingleEntryPlugin(this.context, request, options.name).apply(workletCompiler);
+  var subCache = "subcache " + __dirname + " " + request;
+  workletCompiler.hooks.compilation.tap(NAME, function (compilation) {
     if (compilation.cache) {
-      if (!compilation.cache[subCache]) compilation.cache[subCache] = {};
+      if (!compilation.cache[subCache]) { compilation.cache[subCache] = {}; }
       compilation.cache = compilation.cache[subCache];
     }
   });
-
-  workletCompiler.runAsChild((err, entries, compilation) => {
+  workletCompiler.runAsChild(function (err, entries, compilation) {
     if (!err && compilation.errors && compilation.errors.length) {
       err = compilation.errors[0];
     }
-    const entry = entries && entries[0] && entries[0].files[0];
-    if (!err && !entry) err = Error(`CssWorkletPlugin: no entry for ${request}`);
-    if (err) return cb(err);
-    return cb(null, `module.exports = __webpack_public_path__ + ${JSON.stringify(entry)}`);
-  });
-};
 
+    var entry = entries && entries[0] && entries[0].files[0];
+    if (!err && !entry) { err = Error(("CssWorkletPlugin: no entry for " + request)); }
+    if (err) { return cb(err); }
+    return cb(null, ("module.exports = __webpack_public_path__ + " + (JSON.stringify(entry))));
+  });
+}
 module.exports = pitch;
+//# sourceMappingURL=loader.js.map

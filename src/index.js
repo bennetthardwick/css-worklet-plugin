@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+var path = require('path');
 
-const path = require('path');
-const ParserHelpers = require('webpack/lib/ParserHelpers');
-const CSS_WORKLET_PLUGIN_SYMBOL_KEY = require('./symbol');
+var ParserHelpers = require('webpack/lib/ParserHelpers');
 
-const NAME = 'CssWorkletPlugin';
-const JS_TYPES = ['auto', 'esm', 'dynamic'];
-const WORKLET_TYPES = ['paintWorklet', 'animationWorklet', 'layoutWorklet'];
-const workerLoader = path.resolve(__dirname, 'loader.js');
+var CSS_WORKLET_PLUGIN_SYMBOL_KEY = require('./symbol');
 
-const CSS_WORKLET_PLUGIN_SYMBOL = Symbol.for(CSS_WORKLET_PLUGIN_SYMBOL_KEY);
+var NAME = 'CssWorkletPlugin';
+var JS_TYPES = ['auto', 'esm', 'dynamic'];
+var WORKLET_TYPES = ['paintWorklet', 'animationWorklet', 'layoutWorklet'];
+var workerLoader = path.resolve(__dirname, 'loader.js');
+var CSS_WORKLET_PLUGIN_SYMBOL = Symbol.for(CSS_WORKLET_PLUGIN_SYMBOL_KEY);
 
-const handleWorklet = (parser, workletId) => expr => {
-  if (expr.callee.property.name !== 'addModule') return false;
+var handleWorklet = function (parser, workletId) { return function (expr) {
+  if (expr.callee.property.name !== 'addModule') { return false; }
+  var dep = parser.evaluateExpression(expr.arguments[0]);
 
-  const dep = parser.evaluateExpression(expr.arguments[0]);
   if (!dep.isString()) {
     parser.state.module.warnings.push({
       message: 'addModule() worklet will only be bundled if passed a String.'
@@ -36,32 +36,37 @@ const handleWorklet = (parser, workletId) => expr => {
     return false;
   }
 
-  const loaderOptions = { name: workletId + '' };
-  const req = `require(${JSON.stringify(workerLoader + '?' + JSON.stringify(loaderOptions) + '!' + dep.string)})`;
-  const id = `__webpack__worker__${workletId++}`;
+  var loaderOptions = {
+    name: workletId + ''
+  };
+  var req = "require(" + (JSON.stringify(workerLoader + '?' + JSON.stringify(loaderOptions) + '!' + dep.string)) + ")";
+  var id = "__webpack__worker__" + (workletId++);
   ParserHelpers.toConstantDependency(parser, id)(expr.arguments[0]);
-
   return ParserHelpers.addParsedVariableToModule(parser, id, req);
+}; };
+
+var CssWorkletPlugin = function CssWorkletPlugin(options) {
+  this.options = options || {};
+  this[CSS_WORKLET_PLUGIN_SYMBOL] = true;
 };
 
-class CssWorkletPlugin {
-  constructor (options) {
-    this.options = options || {};
-    this[CSS_WORKLET_PLUGIN_SYMBOL] = true;
-  }
+CssWorkletPlugin.prototype.apply = function apply (compiler) {
+  compiler.hooks.normalModuleFactory.tap(NAME, function (factory) {
+    var workletId = 0;
 
-  apply (compiler) {
-    compiler.hooks.normalModuleFactory.tap(NAME, factory => {
-      let workletId = 0;
-      for (const type of JS_TYPES) {
-        factory.hooks.parser.for(`javascript/${type}`).tap(NAME, parser => {
-          for (const worklet of WORKLET_TYPES) {
-            parser.hooks.callAnyMember.for(`CSS.${worklet}`).tap(NAME, handleWorklet(parser, workletId));
-          }
-        });
-      }
-    });
-  }
-}
+    for (var i = 0, list = JS_TYPES; i < list.length; i += 1) {
+      var type = list[i];
+
+        factory.hooks.parser.for(("javascript/" + type)).tap(NAME, function (parser) {
+        for (var i = 0, list = WORKLET_TYPES; i < list.length; i += 1) {
+          var worklet = list[i];
+
+            parser.hooks.callAnyMember.for(("CSS." + worklet)).tap(NAME, handleWorklet(parser, workletId));
+        }
+      });
+    }
+  });
+};
 
 module.exports = CssWorkletPlugin;
+//# sourceMappingURL=index.js.map
