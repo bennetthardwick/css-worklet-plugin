@@ -22,6 +22,7 @@ import { evaluatePage } from './_page';
 
 jest.setTimeout(30000);
 
+// TODO puppeteer chromium instance does not have paintworklet on CSS object
 xdescribe('Integration', () => {
   test('The resulting Worklet is instantiated correctly', async () => {
     const fixture = 'basic';

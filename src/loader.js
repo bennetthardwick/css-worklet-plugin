@@ -27,7 +27,6 @@ let hasWarned = false;
 export function pitch (request) {
   this.cacheable(false);
   const cb = this.async();
-  debugger;
 
   const compilerOptions = this._compiler.options || {};
 

@@ -21,7 +21,7 @@ import CSS_WORKLET_PLUGIN_SYMBOL_KEY from './symbol';
 const NAME = 'CssWorkletPlugin';
 const JS_TYPES = ['auto', 'esm', 'dynamic'];
 const WORKLET_TYPES = ['paintWorklet', 'animationWorklet', 'layoutWorklet'];
-const workerLoader = path.resolve(__dirname, 'loader.js');
+const workletLoader = path.resolve(__dirname, 'loader.js');
 
 const CSS_WORKLET_PLUGIN_SYMBOL = Symbol.for(CSS_WORKLET_PLUGIN_SYMBOL_KEY);
 
@@ -37,8 +37,8 @@ const handleWorklet = (parser, workletId) => expr => {
   }
 
   const loaderOptions = { name: workletId + '' };
-  const req = `require(${JSON.stringify(workerLoader + '?' + JSON.stringify(loaderOptions) + '!' + dep.string)})`;
-  const id = `__webpack__worker__${workletId++}`;
+  const req = `require(${JSON.stringify(workletLoader + '?' + JSON.stringify(loaderOptions) + '!' + dep.string)})`;
+  const id = `__webpack__worklet__${workletId++}`;
   ParserHelpers.toConstantDependency(parser, id)(expr.arguments[0]);
 
   return ParserHelpers.addParsedVariableToModule(parser, id, req);
