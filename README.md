@@ -1,4 +1,4 @@
-# Automatically bundle & compile CSS Worklets within Webpack.</p>
+# A Webpack Plugin to automatically bundle & compile CSS Worklets.</p>
 
 
 ### Features
@@ -60,25 +60,25 @@ main.css:
 
 ## Options
 
-In most cases, no options are necessary to use WorkerPlugin.
+In most cases, no options are necessary to use CssWorkletPlugin.
 
 ### `globalObject`
 
-WorkerPlugin will warn you if your Webpack configuration has `output.globalObject` set to `window`, since doing so breaks Hot Module Replacement in web workers.
+CssWorkletPlugin will warn you if your Webpack configuration has `output.globalObject` set to `window`, since doing so breaks Hot Module Replacement in web workers.
 
 If you're not using HMR and want to disable this warning, pass `globalObject:false`:
 
 ```js
-new WorkerPlugin({
+new CssWorkletPlugin({
   // disable warnings about "window" breaking HMR:
   globalObject: false
 })
 ```
 
-To configure the value of `output.globalObject` for WorkerPlugin's internal Webpack Compiler, set `globalObject` to any String:
+To configure the value of `output.globalObject` for CssWorkletPlugin's internal Webpack Compiler, set `globalObject` to any String:
 
 ```js
-new WorkerPlugin({
+new CssWorkletPlugin({
   // use "self" as the global object when receiving hot updates.
   globalObject: 'self' // <-- this is the default value
 })
@@ -86,9 +86,9 @@ new WorkerPlugin({
 
 ### `plugins`
 
-By default, `WorkerPlugin` doesn't run any of your configured Webpack plugins when bundling worker code - this avoids running things like `html-webpack-plugin` twice. For cases where it's necessary to apply a plugin to Worker code, use the `plugins` option.
+By default, `CssWorkletPlugin` doesn't run any of your configured Webpack plugins when bundling worker code - this avoids running things like `html-webpack-plugin` twice. For cases where it's necessary to apply a plugin to Worklet code, use the `plugins` option.
 
-Here you can specify the names of plugins to "copy" from your existing Webpack configuration, or provide specific plugins to apply only to worker code:
+Here you can specify the names of plugins to "copy" from your existing Webpack configuration, or provide specific plugins to apply only to worklet code:
 
 ```js
 module.exports = {
@@ -97,7 +97,7 @@ module.exports = {
     // an example of a plugin already being used:
     new SomeExistingPlugin({ <...> }),
 
-    new WorkerPlugin({
+    new CssWorkletPlugin({
       plugins: [
         // A string here will copy the named plugin from your configuration:
         'SomeExistingPlugin',
